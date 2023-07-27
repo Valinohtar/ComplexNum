@@ -1,14 +1,14 @@
 #complex numbers implementation
-from math import sqrt, asin, pi, sin, cos
+from math import sqrt, atan2, pi, sin, cos
 
 class ComplexNumber:
     def __init__(self, Re, Im):
         self.Re = Re
         self.Im = Im
         if abs(self):
-            self.Arg = asin(self.Im/abs(self))*180/pi
+            self.Arg = atan2(self.Im, self.Re)*180/pi
         else:
-            self.Arg = 'Every angle'
+            self.Arg = 0
     
     def __abs__(self):
         return sqrt(self.Re**2 + self.Im**2)
@@ -47,12 +47,22 @@ class TrigForm:
     
     def toComplex(self):
         return ComplexNumber(cos(self.Arg*pi/180)*self.abs_val, sin(self.Arg*pi/180)*self.abs_val)
+
+    def __mul__(self, other):
+        return TrigForm(self.Arg + other.Arg, self.abs_val*other.abs_val)
     
     
          
 
 
 
-z1 = ComplexNumber(3,-1)
-z2 = ComplexNumber(2,5)
+#z1 = ComplexNumber(3,-1)
+#z2 = ComplexNumber(2,5)
 
+z1 = TrigForm(30, 2)
+z2 = TrigForm(90, 3)
+print(z1, z2,'=', z1*z2)
+z3 = (z1*z2).toComplex()
+print(z3)
+print(z3.toTrig().toComplex().toTrig())
+#print(z3.Re)
