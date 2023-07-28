@@ -51,6 +51,25 @@ class TrigForm:
     def __mul__(self, other):
         return TrigForm(self.Arg + other.Arg, self.abs_val*other.abs_val)
     
+    def __truediv__(self, other):
+        return TrigForm(self.Arg - other.Arg, self.abs_val/other.abs_val)
+    
+    def pow(self, power):
+        return TrigForm(self.Arg*power, self.abs_val ** power)
+    
+    #i think I'll just add separate methods for printing and returning
+    def roots(self, root):
+        rad_Arg = (self.Arg/180)*pi
+        root_list = [(rad_Arg + i*2*pi)/root for i in range(root)]
+        root_absval = self.abs_val**(1/root)
+        final = []
+        for root_item in root_list:
+            new_root = TrigForm(root_item*180/pi, root_absval)
+            final.append(new_root)
+            print(new_root)
+
+        return final
+    
     
          
 
@@ -59,10 +78,7 @@ class TrigForm:
 #z1 = ComplexNumber(3,-1)
 #z2 = ComplexNumber(2,5)
 
-z1 = TrigForm(30, 2)
-z2 = TrigForm(90, 3)
-print(z1, z2,'=', z1*z2)
-z3 = (z1*z2).toComplex()
-print(z3)
-print(z3.toTrig().toComplex().toTrig())
-#print(z3.Re)
+z1 = ComplexNumber(1,0)
+z1 = z1.toTrig()
+z1.roots(120)
+
