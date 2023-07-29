@@ -27,17 +27,17 @@ class ComplexNumber:
     
     def __str__(self):
         if self.Im >= 0:
-            return f'{self.Re} + {self.Im}i'
+            return f'{round(self.Re, 10)} + {round(self.Im, 10)}i'
         else:
-            return f'{self.Re} - {abs(self.Im)}i'
+            return f'{round(self.Re, 10)} - {abs(round(self.Im, 10))}i'
     
     def conjugate(self):
         return(ComplexNumber(self.Re, -1*self.Im))
     
-    def toTrig(self):
-        return TrigForm(self.Arg, abs(self))
+    def toPolar(self):
+        return PolarForm(self.Arg, abs(self))
 
-class TrigForm:
+class PolarForm:
     def __init__(self, Arg, abs_val):
         self.Arg = Arg 
         self.abs_val = abs_val
@@ -49,28 +49,41 @@ class TrigForm:
         return ComplexNumber(cos(self.Arg*pi/180)*self.abs_val, sin(self.Arg*pi/180)*self.abs_val)
 
     def __mul__(self, other):
-        return TrigForm(self.Arg + other.Arg, self.abs_val*other.abs_val)
+        return PolarForm(self.Arg + other.Arg, self.abs_val*other.abs_val)
     
     def __truediv__(self, other):
-        return TrigForm(self.Arg - other.Arg, self.abs_val/other.abs_val)
+        return PolarForm(self.Arg - other.Arg, self.abs_val/other.abs_val)
     
     def pow(self, power):
-        return TrigForm(self.Arg*power, self.abs_val ** power)
+        return PolarForm(self.Arg*power, self.abs_val ** power)
     
-    #i think I'll just add separate methods for printing and returning
+    #i think I'll just add separate methods for printing and returning/done
     def roots(self, root):
+        '''Returns a list of PolarForm objects - the roots of root power'''
         rad_Arg = (self.Arg/180)*pi
         root_list = [(rad_Arg + i*2*pi)/root for i in range(root)]
         root_absval = self.abs_val**(1/root)
         final = []
         for root_item in root_list:
-            new_root = TrigForm(root_item*180/pi, root_absval)
+            new_root = PolarForm(root_item*180/pi, root_absval)
             final.append(new_root)
-            print(new_root)
 
         return final
     
-    
+    def print_roots(self, root):
+        '''Prints a list of PolarForm objects and returns it'''
+        final = self.roots(root)
+        for root_item in final:
+            print(root_item)
+
+        return final
+
+    def print_rectangular_roots(self, root):
+        final = self.roots(root)
+        for root_item in final:
+            print(root_item.toComplex())
+
+ 
          
 
 
@@ -78,7 +91,7 @@ class TrigForm:
 #z1 = ComplexNumber(3,-1)
 #z2 = ComplexNumber(2,5)
 
-z1 = ComplexNumber(1,0)
-z1 = z1.toTrig()
-z1.roots(120)
+z1 = ComplexNumber(16,0)
+z1 = z1.toPolar()
+z1.print_rectangular_roots(8)
 
